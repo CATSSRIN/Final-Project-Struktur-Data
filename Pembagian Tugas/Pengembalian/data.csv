@@ -1,32 +1,32 @@
 idBuku,judulBuku,penulis,jumlahBuku
-B001,Dasar-Dasar Pemrograman,John Doe,0
-B002,Struktur Data dan Algoritma,Jane Smith,10
-B003,Pemrograman Berorientasi Objek,Robert Bro,8
-B004,Sistem Operasi,Alice Whit,12
-B005,Jaringan Komputer,David Blac,20
-B006,Database Management Systems,Charles Gr,5
-B007,Analisis dan Perancangan Sistem,Megan Harr,7
-B008,Pengantar Kecerdasan Buatan,Daniel Kin,9
-B009,Matematika Diskrit untuk Informatika,Laura Nels,18
-B010,Keamanan Jaringan,Michael Sc,11
-B011,Algoritma dan Pemrograman,Steven Ada,6
-B012,Pengantar Teknologi Informasi,Sarah Lee,13
-B013,Cloud Computing: Teori dan Aplikasi,William Tu,16
-B014,Pembelajaran Mesin,Sophia Mit,14
-B015,Sistem Informasi Manajemen,James Harr,22
-B016,Kecerdasan Buatan untuk Pemula,Emma Moore,17
-B017,Pemrograman Web dengan JavaScript,Ethan Youn,8
+001,Dasar-Dasar Pemrograman,John Doe,1
+002,Struktur Data dan Algoritma,Jane Smith,10
+003,Pemrograman Berorientasi Objek,Robert Bro,8
+004,Sistem Operasi,Alice Whit,12
+005,Jaringan Komputer,David Blac,20
+006,Database Management Systems,Charles Gr,5
+007,Analisis dan Perancangan Sistem,Megan Harr,7
+008,Pengantar Kecerdasan Buatan,Daniel Kin,9
+009,Matematika Diskrit untuk Informatika,Laura Nels,18
+010,Keamanan Jaringan,Michael Sc,11
+011,Algoritma dan Pemrograman,Steven Ada,6
+012,Pengantar Teknologi Informasi,Sarah Lee,13
+013,Cloud Computing: Teori dan Aplikasi,William Tu,16
+014,Pembelajaran Mesin,Sophia Mit,14
+015,Sistem Informasi Manajemen,James Harr,22
+016,Kecerdasan Buatan untuk Pemula,Emma Moore,17
+017,Pemrograman Web dengan JavaScript,Ethan Youn,8
 B018,Sistem Basis Data Relasional,Olivia Mar,10
-B019,Teori Komputasi,Henry Tayl,4
-B020,Data Science dengan Python,Liam Wilso,19
-B021,Framework Laravel untuk Pemula,Ava Clark,25
-B022,Teknik Kompilasi,Lucas Lewi,7
-B023,Komunikasi Data dan Protokol,Mason Walk,12
-B024,Prinsip dan Praktik Rekayasa Perangkat Lunak,Amelia Per,9
-B025,Sistem Terdistribusi,Jack Marti,6
-B026,Data Mining dan Big Data,Chloe Garc,11
-B027,Pengembangan Aplikasi Mobile,William Yo,17
-B028,Keamanan Siber dan Etika,Lily Ander,13
-B029,Pengolahan Citra Digital,Grace Robi,8
-B030,Internet of Things (IoT),Matthew Ha,20
-B0031,as,as,40
+019,Teori Komputasi,Henry Tayl,4
+020,Data Science dengan Python,Liam Wilso,19
+021,Framework Laravel untuk Pemula,Ava Clark,25
+022,Teknik Kompilasi,Lucas Lewi,7
+023,Komunikasi Data dan Protokol,Mason Walk,12
+024,Prinsip dan Praktik Rekayasa Perangkat Lunak,Amelia Per,9
+025,Sistem Terdistribusi,Jack Marti,6
+026,Data Mining dan Big Data,Chloe Garc,11
+027,Pengembangan Aplikasi Mobile,William Yo,17
+028,Keamanan Siber dan Etika,Lily Ander,13
+029,Pengolahan Citra Digital,Grace Robi,8
+030,Internet of Things (IoT),Matthew Ha,20
+031,as,as,40
