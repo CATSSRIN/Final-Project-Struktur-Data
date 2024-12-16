@@ -28,16 +28,16 @@ find_node *createfind_node(const char *idBuku, const char *judulBuku, const char
     return newfind_node;
 }
 
-void appendfind_node(find_node **head, const char *idBuku, const char *judulBuku, const char *penulis, int jumlahBuku)
+void appendfind_node(find_node **find_head, const char *idBuku, const char *judulBuku, const char *penulis, int jumlahBuku)
 {
     find_node *newfind_node = createfind_node(idBuku, judulBuku, penulis, jumlahBuku);
-    if (*head == NULL)
+    if (*find_head == NULL)
     {
-        *head = newfind_node;
+        *find_head = newfind_node;
     }
     else
     {
-        find_node *temp = *head;
+        find_node *temp = *find_head;
         while (temp->next != NULL)
         {
             temp = temp->next;
@@ -46,7 +46,7 @@ void appendfind_node(find_node **head, const char *idBuku, const char *judulBuku
     }
 }
 
-void readFile(const char *filename, find_node **head)
+void readFile(const char *filename, find_node **find_head)
 {
     FILE *file = fopen(filename, "r");
     if (!file)
@@ -72,7 +72,7 @@ void readFile(const char *filename, find_node **head)
 
         if (sscanf(line, "%9[^,],%99[^,],%49[^,],%d", idBuku, judulBuku, penulis, &jumlahBuku) == 4)
         {
-            appendfind_node(head, idBuku, judulBuku, penulis, jumlahBuku);
+            appendfind_node(find_head, idBuku, judulBuku, penulis, jumlahBuku);
         }
         else
         {
@@ -83,15 +83,15 @@ void readFile(const char *filename, find_node **head)
     fclose(file);
 }
 
-find_node *searchById(find_node *head, const char *id)
+find_node *searchById(find_node *find_head, const char *id)
 {
-    while (head != NULL)
+    while (find_head != NULL)
     {
-        if (strcmp(head->idBuku, id) == 0)
+        if (strcmp(find_head->idBuku, id) == 0)
         {
-            return head;
+            return find_head;
         }
-        head = head->next;
+        find_head = find_head->next;
     }
     return NULL;
 }
@@ -119,9 +119,9 @@ void displayRecord(find_node *find_node)
     printf("---------------------------------------------------------------------------------\n\n");
 }
 
-void displayList(find_node *head)
+void displayList(find_node *find_head)
 {
-    if (head == NULL)
+    if (find_head == NULL)
     {
         printf("The list is empty.\n");
         return;
@@ -131,7 +131,7 @@ void displayList(find_node *head)
     printf("ID Buku        Judul Buku                           Penulis           Jumlah Buku\n");
     printf("---------------------------------------------------------------------------------\n");
 
-    find_node *temp = head;
+    find_node *temp = find_head;
     while (temp != NULL)
     {
         printf("%-12s %-35s %-15s ", temp->idBuku, temp->judulBuku, temp->penulis);
@@ -148,13 +148,13 @@ void displayList(find_node *head)
     printf("---------------------------------------------------------------------------------\n");
 }
 
-void freeList(find_node *head)
+void find_freelist(find_node *find_head)
 {
     find_node *temp;
-    while (head != NULL)
+    while (find_head != NULL)
     {
-        temp = head;
-        head = head->next;
+        temp = find_head;
+        find_head = find_head->next;
         free(temp);
     }
 }
@@ -285,10 +285,10 @@ void option6()
 int main()
 {
     // Cari Data --------------------------------------------------------------------------------------------------
-    find_node *head = NULL;
+    find_node *find_head = NULL;
     const char *filename = "data.csv";
 
-    readFile(filename, &head);
+    readFile(filename, &find_head);
 
     int find_choice;
 
@@ -309,6 +309,7 @@ int main()
     // Main ----------------------------------------------------------------------------------------------------------
     int choice;
     int pilihan;
+    int pilihan_riwayat;
     //--------------------------------------------------------------------------------------------------------
     while (1)
     {
@@ -375,7 +376,7 @@ int main()
             scanf("%d", &pilihan);
             getchar(); // Menghapus karakter newline dari buffer
 
-            switch (pilihan)
+            switch (pilihan_riwayat)
             {
             case 1:
                 tampilkanRiwayat(head);
@@ -406,10 +407,6 @@ int main()
                 printf("Pilihan tidak valid! Kembali ke menu utama.\n");
                 break;
             }
-        }
-    case 6:
-        option6();
-        break;
     case 7:
         printf("Exiting...\n");
         exit(0);
