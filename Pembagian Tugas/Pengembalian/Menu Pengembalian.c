@@ -11,7 +11,7 @@ typedef struct BorrowData {
 BorrowData* createBorrowData(const char* nama, const char* idBuku) {
     BorrowData* newNode = (BorrowData*)malloc(sizeof(BorrowData));
     if (!newNode) {
-        fprintf(stderr, "Memory allocation failed\n");
+        fprintf(stderr, "Alokasi Memori Gagal\n");
         exit(1);
     }
     strncpy(newNode->nama, nama, sizeof(newNode->nama) - 1);
@@ -38,7 +38,7 @@ void appendBorrowData(BorrowData** head, const char* nama, const char* idBuku) {
 void readBorrowFile(const char* filename, BorrowData** head) {
     FILE* file = fopen(filename, "r");
     if (!file) {
-        fprintf(stderr, "Failed to open file: %s\n", filename);
+        fprintf(stderr, "Gagal untuk membuka file: %s\n", filename);
         return;
     }
 
@@ -55,11 +55,11 @@ void readBorrowFile(const char* filename, BorrowData** head) {
 
 void displayBorrowData(BorrowData* head) {
     if (head == NULL) {
-        printf("No borrow records available.\n");
+        printf("Tidak Ada Catatan Peminjaman yang tersedia.\n");
         return;
     }
 
-    printf("\nList of Borrowed Books:\n");
+    printf("\nDaftar Buku yang Dipinjam:\n");
     printf("-------------------------------\n");
     printf("Nama           :   ID Buku\n");
     printf("-------------------------------\n");
@@ -74,7 +74,7 @@ void displayBorrowData(BorrowData* head) {
 void saveBorrowData(const char* filename, BorrowData* head) {
     FILE* file = fopen(filename, "w");
     if (!file) {
-        fprintf(stderr, "Failed to open file: %s\n", filename);
+        fprintf(stderr, "Gagal untuk membuka file: %s\n", filename);
         return;
     }
 
@@ -92,7 +92,7 @@ void updateJumlahBuku(const char* dataFilename, const char* idBuku) {
     FILE *tempFile = fopen("temp.csv", "w");
 
     if (!file || !tempFile) {
-        fprintf(stderr, "Failed to open files for update operation\n");
+        fprintf(stderr, "Gagal Membuka file untuk pembaruan operasi\n");
         if (file) fclose(file);
         if (tempFile) fclose(tempFile);
         return;
@@ -122,10 +122,10 @@ void updateJumlahBuku(const char* dataFilename, const char* idBuku) {
     if (updated) {
         remove(dataFilename);
         rename("temp.csv", dataFilename);
-        printf("Updated jumlahBuku for ID %s in %s.\n", idBuku, dataFilename);
+        printf("Memperbarui jumlahBuku untuk ID %s di %s.\n", idBuku, dataFilename);
     } else {
         remove("temp.csv");
-        printf("Book ID %s not found in %s.\n", idBuku, dataFilename);
+        printf("ID Buku %s Tidak Ditemukan di %s.\n", idBuku, dataFilename);
     }
 }
 
@@ -138,13 +138,13 @@ void returnBorrowedBook(BorrowData** head, const char* idBuku, const char* retur
     }
 
     if (temp == NULL) {
-        printf("Borrow record with ID %s not found.\n", idBuku);
+        printf("Catatan Peminjam dengan ID %s tidak ditemukan.\n", idBuku);
         return;
     }
 
     FILE* file = fopen(returnFile, "a");
     if (!file) {
-        fprintf(stderr, "Failed to open file: %s\n", returnFile);
+        fprintf(stderr, "Gagal untuk membuka file: %s\n", returnFile);
         return;
     }
     fprintf(file, "%s,%s\n", temp->nama, temp->idBuku);
@@ -161,7 +161,7 @@ void returnBorrowedBook(BorrowData** head, const char* idBuku, const char* retur
 
     updateJumlahBuku(dataFile, idBuku);
 
-    printf("Borrow record with ID %s has been returned and updated.\n", idBuku);
+    printf("Catatan dengan ID %s telah dikembalikan dan diperbarui.\n", idBuku);
 }
 
 int main() {
@@ -177,12 +177,12 @@ int main() {
 
     while (1) {
         printf("\nMenu:\n");
-        printf("1. Show all borrowed books\n");
-        printf("2. Return a book\n");
-        printf("3. Exit\n");
-        printf("Enter your choice: ");
+        printf("1. Tampilkan seluruh buku yang dipinjam\n");
+        printf("2. Mengembalikan Buku\n");
+        printf("3. Keluar\n");
+        printf("Masukan Pilihan Anda: ");
         if (scanf("%d", &choice) != 1) {
-            printf("Invalid input. Please enter a number.\n");
+            printf("Invalid input. Masukan Angka.\n");
             while (getchar() != '\n'); 
             continue;
         }
@@ -195,7 +195,7 @@ int main() {
             }
             case 2: {
 
-                printf("Enter the ID of the book to return: ");
+                printf("Masukan ID buku untuk pengembalian: ");
                 scanf("%s", idBuku);
 
                 returnBorrowedBook(&borrowList, idBuku, returnFile, dataFile); 
@@ -204,7 +204,7 @@ int main() {
             }
             case 3: {
 
-                printf("Exiting program. Freeing memory...\n");
+                printf("Keluar Dari Program. Membersihkan memori...\n");
                 BorrowData* temp;
                 while (borrowList != NULL) {
                     temp = borrowList;
@@ -214,7 +214,7 @@ int main() {
                 return 0;
             }
             default:
-                printf("Invalid choice. Please try again.\n");
+                printf("Pilihan Tidak Valid. Tolong Coba Lagi.\n");
         }
     }
 }
