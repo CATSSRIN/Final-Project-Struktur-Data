@@ -33,7 +33,7 @@ Anggota Kelompok:
 |Pinjam buku|  |
 |Antrian|  |
 |Riwayat| Selesai |
-|Kembalikan buku|  |
+|Kembalikan buku| Selesai |
 
  ## Algoritma
  ```
