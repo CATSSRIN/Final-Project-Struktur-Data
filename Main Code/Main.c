@@ -158,22 +158,52 @@ void find_freelist(find_node *find_head)
         free(temp);
     }
 }
-// Pinjam buku -----------------------------------------------------------------------------------------------------------
-void option3()
+// Pilih buku -----------------------------------------------------------------------------------------------------------
+void option2()
 {
-    printf("Option 3 selected.\n");
+    printf("Option 2 selected.\n");
 }
-// Antrian -----------------------------------------------------------------------------------------------------------
+// Pinjam buku -----------------------------------------------------------------------------------------------------------
+typedef struct node {
+    struct node *next;
+    char nama_user[50];
+    int id_buku;
+} node;
+
 typedef struct queue {
     int count;
     node *front;
     node *rear;
 } queue;
+
 void initqueue(queue *q) {
     q->count = 0;
     q->front = NULL;
     q->rear = NULL;
 }
+
+void enqueue(queue *q, char nama_user[50], int id_buku) {
+
+    
+    node *newNode = (node *)malloc(sizeof(node));
+    if (newNode == NULL) {
+        printf("Alokasi memori gagal!\n");
+        return;
+    }
+    strcpy(newNode->nama_user, nama_user);
+    newNode->id_buku = id_buku;
+    newNode->next = NULL;
+
+    if (q->rear == NULL) {
+        q->front = q->rear = newNode;
+    } else {
+        q->rear->next = newNode;
+        q->rear = newNode;
+    }
+    q->count++;
+}
+// Antrian -----------------------------------------------------------------------------------------------------------struct
+
 void displayQueue(queue *q)
 {
     char buffer[255];
@@ -182,7 +212,7 @@ void displayQueue(queue *q)
         printf("File error, tidak dapat ditemukan!\n");
         return;
     }
-    printf("Isi File 'user_list.csv':\n");
+    printf("List Antrian:\n");
     while (fgets(buffer, sizeof(buffer), file)) {
         printf("%s", buffer);
     }
@@ -260,10 +290,10 @@ const char *cariIDBuku(Node *head, const char *nama)
 
 void loadRiwayat(Node **head, Node **tail)
 {
-    FILE *file = fopen("riwayat.csv", "r");
+    FILE *file = fopen("user_list.csv", "r");
     if (file == NULL)
     {
-        printf("Gagal membuka file riwayat.csv\n");
+        printf("Gagal membuka file user_list.csv\n");
         return;
     }
 
@@ -466,12 +496,18 @@ int main()
     int find_choice;
 
     char id[10];
-    // Pinjam buku --------------------------------------------------------------------------------------------------
+    // Pilih buku --------------------------------------------------------------------------------------------------
 
-    // Antrian --------------------------------------------------------------------------------------------------
-    char buffer[50];
+    // Pinjam buku --------------------------------------------------------------------------------------------------
+    char nama_user[50];
+    int id_buku;
+    int stock = 5; // Contoh stock buku
     queue antrian;
     initqueue(&antrian);
+    int pinjam_choice;
+    // Antrian ------------------------------------------------------------------------------------------------------4
+    char buffer[50];
+    int antri_choice;
     // Riwayat --------------------------------------------------------------------------------------------------
     Node *head = NULL;
     Node *tail = NULL;
@@ -483,7 +519,7 @@ int main()
     // Kembalikan Buku  --------------------------------------------------------------------------------------------------
     BorrowData* borrowList = NULL;
     const char* borrowFile = "user_list.csv";
-    const char* returnFile = "riwayat.csv";
+    const char* returnFile = "pengembalian.csv";
     const char* dataFile = "data.csv";
 
     readBorrowFile(borrowFile, &borrowList);
@@ -498,11 +534,12 @@ int main()
     {
         printf("Menu:\n");
         printf("1. Cari buku\n");
-        printf("2. Pinjam buku\n");
-        printf("3. Antrian\n");
-        printf("4. Riwayat\n");
-        printf("5. Kembalikan buku\n");
-        printf("6. Keluar\n");
+        printf("2. Pilih buku\n");
+        printf("3. Pinjam buku\n");
+        printf("4. Antrian\n");
+        printf("5. Riwayat\n");
+        printf("6. Kembalikan buku\n");
+        printf("7. Keluar\n");
         printf("Masukkan Pilihan:");
         scanf("%d", &choice);
 
@@ -524,12 +561,12 @@ int main()
             {
             case 1:
                 printf("Data Buku:\n");
-                displayList(find_head);
+                displayList(head);
                 break;
             case 2:
                 printf("Masukkan ID Buku: ");
                 scanf("%s", id);
-                find_node *foundNode = searchById(find_head, id);
+                find_node *foundNode = searchById(head, id);
                 displayRecord(foundNode);
                 break;
             case 3:
@@ -541,15 +578,67 @@ int main()
             }
             break;
         case 2:
-            option3();
+            option2();
             break;
-        case 3:
+       case 3:
+    printf("\n=== Menu Peminjaman Buku ===\n");
+    printf("1. Pinjam Buku\n");
+    printf("2. Keluar\n");
+    printf("Pilihan Anda: ");
+    scanf("%d", &pinjam_choice);
+    getchar(); // Membersihkan buffer setelah scanf
+
+    switch (pinjam_choice) {
+        case 1:
+            printf("\n--- Pinjam Buku ---\n");
+
+            // Input Nama User
+            printf("Nama user: ");
+            fgets(nama_user, sizeof(nama_user), stdin);
+            nama_user[strcspn(nama_user, "\n")] = 0; // Menghapus karakter newline dari input
+
+            // Input ID Buku
+            printf("ID buku yang mau dipinjam: ");
+            scanf("%d", &id_buku);
+
+            // Buka file untuk mencatat peminjaman
+            FILE *file = fopen("user_list.csv", "a");
+            if (file == NULL) {
+                printf("Error: Tidak bisa membuka file!\n");
+                return 1;
+            }
+
+            // Tulis data ke file
+            fprintf(file, "%s, %d\n", nama_user, id_buku);
+            fclose(file);
+
+            // Periksa stok buku
+            if (stock <= 0) {
+                printf("Maaf, stok buku habis!\n");
+            } else {
+                enqueue(&antrian, nama_user, id_buku); // Memasukkan ke antrian
+                stock--;
+                printf("Buku berhasil dipinjam! Stok sekarang: %d\n", stock);
+            }
+            break;
+
+        case 2:
+            printf("\nKeluar dari menu peminjaman.\n");
+            break;
+
+        default:
+            printf("\nPilihan tidak valid! Silakan pilih 1 atau 2.\n");
+            break;
+    }
+    break;
+
+        case 4:
             printf("\n Menu Antrian \n");
             printf(" 1. Tampilkan Antrian : \n");
             printf(" 2. Keluar. \n");
-            scanf("%d",&choice);
-
-            switch(choice){
+            scanf("%d",&antri_choice);
+            getchar(); // Membersihkan buffer setelah scanf
+            switch(antri_choice){
 
                 case 1 : 
                     displayQueue(&antrian);
@@ -563,13 +652,13 @@ int main()
                     printf("Pilihan Tidak Valid!");
                     break;     
             }
-        case 4:
+        case 5:
             printf("\nMenu Riwayat:\n");
             printf("1. Tampilkan seluruh riwayat peminjaman\n");
             printf("2. Cari ID buku berdasarkan nama pengguna\n");
             printf("3. Keluar\n");
             printf("Masukkan pilihan (1-3): ");
-            scanf("%d", &pilihan_riwayat);
+            scanf("%d", &pilihan);
             getchar(); // Menghapus karakter newline dari buffer
 
             switch (pilihan_riwayat)
@@ -603,7 +692,7 @@ int main()
                 printf("Pilihan tidak valid! Kembali ke menu utama.\n");
                 break;
             }
-        case 5:
+        case 6:
             printf("\nMenu:\n");
             printf("1. Tampilkan seluruh buku yang dipinjam\n");
             printf("2. Mengembalikan Buku\n");
@@ -644,7 +733,7 @@ int main()
             default:
                 printf("Pilihan Tidak Valid. Tolong Coba Lagi.\n");
         }
-        case 6:
+        case 7:
             printf("Exiting...\n");
             exit(0);
         default:
