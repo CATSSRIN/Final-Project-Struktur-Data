@@ -169,9 +169,29 @@ void option3()
     printf("Option 3 selected.\n");
 }
 // Antrian -----------------------------------------------------------------------------------------------------------
-void option4()
+typedef struct queue {
+    int count;
+    node *front;
+    node *rear;
+} queue;
+void initqueue(queue *q) {
+    q->count = 0;
+    q->front = NULL;
+    q->rear = NULL;
+}
+void displayQueue(queue *q)
 {
-    printf("Option 3 selected.\n");
+    char buffer[255];
+    FILE *file = fopen("user_list.csv", "r");
+    if (file == NULL) {
+        printf("File error, tidak dapat ditemukan!\n");
+        return;
+    }
+    printf("Isi File 'user_list.csv':\n");
+    while (fgets(buffer, sizeof(buffer), file)) {
+        printf("%s", buffer);
+    }
+    fclose(file);
 }
 // Riwayat -----------------------------------------------------------------------------------------------------------
 typedef struct Node
@@ -456,7 +476,9 @@ int main()
     // Pinjam buku --------------------------------------------------------------------------------------------------
 
     // Antrian --------------------------------------------------------------------------------------------------
-
+    char buffer[50];
+    queue antrian;
+    initqueue(&antrian);
     // Riwayat --------------------------------------------------------------------------------------------------
     Node *head = NULL;
     Node *tail = NULL;
@@ -533,8 +555,25 @@ int main()
             option3();
             break;
         case 4:
-            option4();
-            break;
+            printf("\n Menu Antrian \n");
+            printf(" 1. Tampilkan Antrian : \n");
+            printf(" 2. Keluar. \n");
+            scanf("%d",&choice);
+
+            switch(choice){
+
+                case 1 : 
+                    displayQueue(&antrian);
+                    break;
+                
+                case 2 : 
+                    printf("Keluar dari program.\n");
+                    break;
+                
+                default :
+                    printf("Pilihan Tidak Valid!");
+                    break;     
+            }
         case 5:
             printf("\nMenu Riwayat:\n");
             printf("1. Tampilkan seluruh riwayat peminjaman\n");
