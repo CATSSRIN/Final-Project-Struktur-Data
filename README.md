@@ -29,9 +29,8 @@ Anggota Kelompok:
 |Menu|Status|
 |------|------|
 |Cari buku| Selesai |
-|Pilih buku|  |
-|Pinjam buku|  |
-|Antrian|  |
+|Pinjam buku| Selesai |
+|Antrian| Selesai |
 |Riwayat| Selesai |
 |Kembalikan buku| Selesai |
 
