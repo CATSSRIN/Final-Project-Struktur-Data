@@ -561,16 +561,16 @@ int main()
             {
             case 1:
                 printf("Data Buku:\n");
-                displayList(head);
+                displayList(find_head);
                 break;
             case 2:
                 printf("Masukkan ID Buku: ");
                 scanf("%s", id);
-                find_node *foundNode = searchById(head, id);
+                find_node *foundNode = searchById(find_head, id);
                 displayRecord(foundNode);
                 break;
             case 3:
-                freeList(head);
+                freeList(find_head);
                 printf("Keluar...\n");
                 return 0;
             default:
@@ -658,7 +658,7 @@ int main()
             printf("2. Cari ID buku berdasarkan nama pengguna\n");
             printf("3. Keluar\n");
             printf("Masukkan pilihan (1-3): ");
-            scanf("%d", &pilihan);
+            scanf("%d", &pilihan_riwayat);
             getchar(); // Menghapus karakter newline dari buffer
 
             switch (pilihan_riwayat)
