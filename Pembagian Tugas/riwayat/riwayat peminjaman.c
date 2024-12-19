@@ -57,18 +57,18 @@ void tampilkanRiwayat(Node *head)
     }
 }
 
-const char *cariIDBuku(Node *head, const char *nama)
+const char *cariIDBuku(Node *tail, const char *id_buku)
 {
-    Node *current = head;
+    Node *current = tail; 
     while (current != NULL)
     {
-        if (strcmp(current->nama_user, nama) == 0)
+        if (strcmp(current->id_buku, id_buku) == 0)
         {
-            return current->id_buku;
+            return current->nama_user; 
         }
-        current = current->right;
+        current = current->left; 
     }
-    return NULL;
+    return NULL; 
 }
 
 void loadRiwayat(Node **head, Node **tail)
@@ -111,7 +111,7 @@ int main()
     loadRiwayat(&head, &tail);
 
     int pilihan;
-    char input_nama[50];
+    char input_id_buku[50];
     const char *id_buku_result = NULL;
 
     while (1)
@@ -131,18 +131,18 @@ int main()
             break;
 
         case 2:
-            printf("Masukkan nama pengguna untuk mencari ID buku: ");
-            fgets(input_nama, sizeof(input_nama), stdin);
-            input_nama[strcspn(input_nama, "\n")] = 0;
-            id_buku_result = cariIDBuku(head, input_nama);
+            printf("Masukkan ID buku untuk mencari peminjam terakhir: ");
+            fgets(input_id_buku, sizeof(input_id_buku), stdin);
+            input_id_buku[strcspn(input_id_buku, "\n")] = 0;
+            id_buku_result = cariIDBuku(head, input_id_buku);
 
             if (id_buku_result == NULL)
             {
-                printf("Nama pengguna tidak ditemukan dalam riwayat peminjaman.\n");
+                printf("ID buku tidak ditemukan dalam riwayat peminjaman.\n");
             }
             else
             {
-                printf("ID Buku yang dipinjam oleh %s adalah: %s\n", input_nama, id_buku_result);
+                printf("peminjam dari id buku %s adalah: %s\n", input_id_buku, id_buku_result);
             }
             break;
 
