@@ -70,7 +70,7 @@ Book *load_books_from_csv(const char *filename) {
             fclose(file);
             return NULL;
         }
-        sscanf(line, "%4[^,],%99[^,],%49[^,],%d",
+        sscanf(line, "%4[^,],%99[^,],%49[^,],%d,%d",
                newBook->id_buku, newBook->judul_buku,
                newBook->penulis, newBook->jumlah_buku,
                &newBook->stock);
