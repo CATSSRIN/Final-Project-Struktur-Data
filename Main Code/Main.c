@@ -188,7 +188,7 @@ void initqueue(queue *q) {
     q->rear = NULL;
 }
 
-void enqueue(queue *q, char nama_user[50], int id_buku) {
+void enqueue(queue *q, char nama_user[50], char id_buku[5]) {
 
     node *newNode = (node *)malloc(sizeof(node));
     if (newNode == NULL) {
@@ -664,9 +664,9 @@ int main()
                 scanf("%s", id_buku);
 
                 // Kurangi stok buku jika tersedia
-                if (reduce_stock(book_list, id_buku)) {
+                if (reduce_stock(book_list, char id_buku[50])) {
                 // Tambahkan ke antrian peminjaman
-                enqueue(&antrian, nama_user, id_buku);
+                enqueue(&antrian, nama_user, char id_buku[50]);
                  printf("Buku berhasil dipinjam oleh %s (ID Buku: %s)\n", nama_user, id_buku);
 
                 // Simpan data buku yang telah diperbarui ke file CSV
