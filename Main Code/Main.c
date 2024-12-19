@@ -8,10 +8,11 @@ typedef struct find_node
     char judulBuku[100];
     char penulis[50];
     int jumlahBuku;
+    int stock; // New field for stock
     struct find_node *next;
 } find_node;
 
-find_node *createfind_node(const char *idBuku, const char *judulBuku, const char *penulis, int jumlahBuku)
+find_node *createfind_node(const char *idBuku, const char *judulBuku, const char *penulis, int jumlahBuku, int stock)
 {
     find_node *newfind_node = (find_node *)malloc(sizeof(find_node));
     if (!newfind_node)
@@ -23,13 +24,14 @@ find_node *createfind_node(const char *idBuku, const char *judulBuku, const char
     strncpy(newfind_node->judulBuku, judulBuku, 100);
     strncpy(newfind_node->penulis, penulis, 50);
     newfind_node->jumlahBuku = jumlahBuku;
+    newfind_node->stock = stock; // Initialize stock
     newfind_node->next = NULL;
     return newfind_node;
 }
 
-void appendfind_node(find_node **find_head, const char *idBuku, const char *judulBuku, const char *penulis, int jumlahBuku)
+void appendfind_node(find_node **find_head, const char *idBuku, const char *judulBuku, const char *penulis, int jumlahBuku, int stock)
 {
-    find_node *newfind_node = createfind_node(idBuku, judulBuku, penulis, jumlahBuku);
+    find_node *newfind_node = createfind_node(idBuku, judulBuku, penulis, jumlahBuku, stock);
     if (*find_head == NULL)
     {
         *find_head = newfind_node;
@@ -67,11 +69,11 @@ void readFile(const char *filename, find_node **find_head)
         char idBuku[10];
         char judulBuku[100];
         char penulis[50];
-        int jumlahBuku;
+        int jumlahBuku, stock;
 
-        if (sscanf(line, "%9[^,],%99[^,],%49[^,],%d", idBuku, judulBuku, penulis, &jumlahBuku) == 4)
+        if (sscanf(line, "%9[^,],%99[^,],%49[^,],%d,%d", idBuku, judulBuku, penulis, &jumlahBuku, &stock) == 5)
         {
-            appendfind_node(find_head, idBuku, judulBuku, penulis, jumlahBuku);
+            appendfind_node(find_head, idBuku, judulBuku, penulis, jumlahBuku, stock);
         }
         else
         {
@@ -103,20 +105,21 @@ void displayRecord(find_node *find_node)
         return;
     }
 
-    printf("---------------------------------------------------------------------------------\n");
-    printf("ID Buku        Judul Buku                           Penulis           Jumlah Buku\n");
-    printf("---------------------------------------------------------------------------------\n");
-    printf("%-12s %-35s %-15s ", find_node->idBuku, find_node->judulBuku, find_node->penulis);
-    if (find_node->jumlahBuku == 0)
+    printf("-----------------------------------------------------------------------------------------\n");
+    printf("ID Buku        Judul Buku                           Penulis           Jumlah Buku   Stock\n");
+    printf("-----------------------------------------------------------------------------------------\n");
+    printf("%-12s %-35s %-15s %-14d ", find_node->idBuku, find_node->judulBuku, find_node->penulis, find_node->jumlahBuku);
+    if (find_node->stock == 0)
     {
         printf("Stok Buku Kosong\n");
     }
     else
     {
-        printf("%d\n", find_node->jumlahBuku);
+        printf("%d\n", find_node->stock);
     }
-    printf("---------------------------------------------------------------------------------\n\n");
+    printf("--------------------------------------------------------------------------------------------------\n\n");
 }
+
 
 void displayList(find_node *find_head)
 {
@@ -126,26 +129,28 @@ void displayList(find_node *find_head)
         return;
     }
 
-    printf("---------------------------------------------------------------------------------\n");
-    printf("ID Buku        Judul Buku                           Penulis           Jumlah Buku\n");
-    printf("---------------------------------------------------------------------------------\n");
+    printf("--------------------------------------------------------------------------------------------------\n");
+    printf("ID Buku        Judul Buku                           Penulis           Jumlah Buku   Stock\n");
+    printf("--------------------------------------------------------------------------------------------------\n");
 
     find_node *temp = find_head;
     while (temp != NULL)
     {
-        printf("%-12s %-35s %-15s ", temp->idBuku, temp->judulBuku, temp->penulis);
-        if (temp->jumlahBuku == 0)
+        printf("%-12s %-35s %-15s %-14d ", temp->idBuku, temp->judulBuku, temp->penulis, temp->jumlahBuku);
+        if (temp->stock == 0)
         {
             printf("Stok Buku Kosong\n");
         }
         else
         {
-            printf("%d\n", temp->jumlahBuku);
+            printf("%d\n", temp->stock);
         }
         temp = temp->next;
     }
-    printf("---------------------------------------------------------------------------------\n");
+    printf("---------------------------------------------------------------------------------------------------\n");
 }
+
+
 
 void find_freelist(find_node *find_head)
 {
@@ -539,7 +544,7 @@ int main()
             printf("\nCari Buku\n");
             printf("-------------------------\n");
             printf("1. Tampilkan Semua Buku\n");
-            printf("2. Cari Buku\n");
+            printf("2. Cari Buku Menggunakan ID Buku\n");
             printf("3. Keluar\n");
             printf("-------------------------\n");
             printf("Tips: \nEdit Data.csv Untuk Menambahkan atau Menghapus Data Buku\n");
