@@ -1,0 +1,32 @@
+idBuku,judulBuku,penulis,jumlahBuku,stock
+B001,Dasar-Dasar Pemrograman,John Doe,5,5
+B002,Struktur Data dan Algoritma,Jane Smith,10,10
+B003,Pemrograman Berorientasi Objek,Robert Bro,8,8
+B004,Sistem Operasi,Alice Whit,12,12
+B005,Jaringan Komputer,David Blac,20,20
+B006,Database Management Systems,Charles Gr,5,5
+B007,Analisis dan Perancangan Sistem,Megan Harr,7,7
+B008,Pengantar Kecerdasan Buatan,Daniel Kin,9,9
+B009,Matematika Diskrit untuk Informatika,Laura Nels,18,18
+B010,Keamanan Jaringan,Michael Sc,11,11
+B011,Algoritma dan Pemrograman,Steven Ada,6,6
+B012,Pengantar Teknologi Informasi,Sarah Lee,13,13
+B013,Cloud Computing: Teori dan Aplikasi,William Tu,16,16
+B014,Pembelajaran Mesin,Sophia Mit,14,14
+B015,Sistem Informasi Manajemen,James Harr,22,22
+B016,Kecerdasan Buatan untuk Pemula,Emma Moore,17,17
+B017,Pemrograman Web dengan JavaScript,Ethan Youn,8,8
+B018,Sistem Basis Data Relasional,Olivia Mar,10,10
+B019,Teori Komputasi,Henry Tayl,4,4
+B020,Data Science dengan Python,Liam Wilso,19,19
+B021,Framework Laravel untuk Pemula,Ava Clark,25,25
+B022,Teknik Kompilasi,Lucas Lewi,7,7
+B023,Komunikasi Data dan Protokol,Mason Walk,12,12
+B024,Prinsip Rekayasa Perangkat Lunak,Amelia Per,9,9
+B025,Sistem Terdistribusi,Jack Marti,6,6
+B026,Data Mining dan Big Data,Chloe Garc,11,11
+B027,Pengembangan Aplikasi Mobile,William Yo,17,17
+B028,Keamanan Siber dan Etika,Lily Ander,13,13
+B029,Pengolahan Citra Digital,Grace Robi,8,8
+B030,Internet of Things (IoT),Matthew Ha,20,20
+B031,as,as,40,40
