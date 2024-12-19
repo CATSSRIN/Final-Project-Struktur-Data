@@ -743,6 +743,8 @@ int main()
         // Simpan data peminjaman ke file user_list.csv
         save_user_to_csv("user_list.csv", nama_user, id_buku);
 
+        // Menampilkan informasi antrian
+        printf("Antrian peminjaman: %d. %s (ID Buku: %s)\n", antrian.count, antrian.front->nama_user, antrian.front->id_buku);
     }
 
     // Bersihkan memori Linked List setelah selesai
@@ -878,7 +880,7 @@ int main()
             break;
         case 6:
             printf("Exiting...\n");
-            break;
+            exit(0);
         default:
             printf("Pilihan Salah.\n");
         }

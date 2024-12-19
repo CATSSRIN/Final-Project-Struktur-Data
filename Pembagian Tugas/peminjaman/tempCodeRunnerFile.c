@@ -1,7 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 typedef struct Book {
     char id_buku[5];
     char judul_buku[100];
@@ -132,50 +128,4 @@ void save_user_to_csv(const char *filename, const char *nama_user, const char *i
     } else {
         printf("Error: Tidak dapat membuka file %s untuk menyimpan data peminjam.\n", filename);
     }
-}
-
-int main() {
-    Book *book_list = load_books_from_csv("data.csv");
-    if (!book_list) return 1;
-
-    queue antrian;
-    initqueue(&antrian);
-
-    char nama_user[50];
-    char id_buku[5];
-
-    // Input nama user
-    printf("Nama user: ");
-    fgets(nama_user, sizeof(nama_user), stdin);
-    nama_user[strcspn(nama_user, "\n")] = '\0'; // Menghapus newline
-
-    // Input ID buku yang ingin dipinjam
-    printf("ID buku yang mau dipinjam: ");
-    scanf("%s", id_buku);
-
-    // Kurangi stok buku jika tersedia
-    if (reduce_stock(book_list, id_buku)) {
-        enqueue(&antrian, nama_user, id_buku);
-        printf("Buku berhasil dipinjam oleh %s (ID Buku: %s)\n", nama_user, id_buku);
-
-        // Debug: Menampilkan stok setelah pengurangan
-        Book *current = book_list;
-        while (current) {
-            if (strcmp(current->id_buku, id_buku) == 0) {
-                printf("Stok buku setelah pengurangan: %d\n", current->stock);
-            }
-            current = current->next;
-        }
-
-        // Simpan data buku yang telah diperbarui ke file
-        save_books_to_csv("data.csv", book_list);
-
-        // Simpan data peminjaman ke file user_list.csv
-        save_user_to_csv("user_list.csv", nama_user, id_buku);
-
-    }
-
-
-
-    return 0;
 }
