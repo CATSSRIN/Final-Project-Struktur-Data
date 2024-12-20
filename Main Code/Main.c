@@ -594,8 +594,8 @@ int main()
         printf("1. Cari buku\n");
         printf("2. Pinjam buku\n");
         printf("3. Antrian\n");
-        printf("4. Riwayat\n");
-        printf("5. Kembalikan buku\n");
+        printf("4. Kembalikan buku\n");
+        printf("5. Riwayat\n");
         printf("6. Keluar\n");
         printf("Masukkan Pilihan:");
         scanf("%d", &choice);
@@ -711,7 +711,7 @@ int main()
                 break;
             }
             break;
-        case 4:
+        case 5:
             printf("\nMenu Riwayat:\n");
             printf("1. Tampilkan seluruh riwayat peminjaman\n");
             printf("2. Cari ID buku berdasarkan nama pengguna\n");
@@ -752,7 +752,7 @@ int main()
                 break;
             }
             break;
-        case 5:
+        case 4:
             printf("1. Tampilkan Peminjaman\n");
             printf("2. Kembalikan Buku\n");
             printf("3. Exit\n");
