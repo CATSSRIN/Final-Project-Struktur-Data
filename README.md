@@ -2,7 +2,7 @@
 ## Kelompok 7
 Anggota Kelompok:
 - [CAEZARLOV NUGRAHA](https://github.com/CATSSRIN)
-- FAJAR RAHMAD JAYA
+- [FAJAR RAHMAD JAYA](https://github.com/Fajar-RahmadJaya)
 - MIFTAHUS SYIFAUL HAQQI
 - SALSABILLA NUHAA AINI
 - I KADEK RANGGA SANDI KUSUMA WARDANA
