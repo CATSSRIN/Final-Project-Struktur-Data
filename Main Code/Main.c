@@ -523,7 +523,7 @@ void saveBorrowData(const char *filename, BorrowData *head)
     fclose(file);
 }
 
-void updateJumlahBuku(const char *dataFilename, const char *idBuku)
+void updateStokBuku(const char *dataFilename, const char *idBuku)
 {
     FILE *file = fopen(dataFilename, "r");
     FILE *tempFile = fopen("temp.csv", "w");
@@ -544,20 +544,25 @@ void updateJumlahBuku(const char *dataFilename, const char *idBuku)
     while (fgets(line, sizeof(line), file))
     {
         char tempId[10], title[100], author[50];
-        int jumlahBuku;
+        int jumlahBuku, stok;
 
-        if (sscanf(line, "%9[^,],%99[^,],%49[^,],%d", tempId, title, author, &jumlahBuku) == 4)
+        // Membaca format file (idbuku, judulbuku, penulis, jumlahbuku, stok)
+        if (sscanf(line, "%9[^,],%99[^,],%49[^,],%d,%d", tempId, title, author, &jumlahBuku, &stok) == 5)
         {
+            // Jika ID buku cocok, tambahkan stok
             if (strcmp(tempId, idBuku) == 0)
             {
-                jumlahBuku++;
+                stok++; // Tambahkan stok karena buku dikembalikan
+                printf("Stok buku dengan ID %s diperbarui menjadi %d.\n", tempId, stok);
                 updated = 1;
             }
-            fprintf(tempFile, "%s,%s,%s,%d\n", tempId, title, author, jumlahBuku);
+            // Tulis kembali data ke file sementara
+            fprintf(tempFile, "%s,%s,%s,%d,%d\n", tempId, title, author, jumlahBuku, stok);
         }
         else
         {
-            fprintf(tempFile, "%s", line);
+            fprintf(stderr, "Baris tidak valid: %s", line);
+            fprintf(tempFile, "%s", line); // Salin baris tanpa modifikasi jika tidak valid
         }
     }
 
@@ -566,14 +571,20 @@ void updateJumlahBuku(const char *dataFilename, const char *idBuku)
 
     if (updated)
     {
-        remove(dataFilename);
-        rename("temp.csv", dataFilename);
-        printf("Memperbarui jumlahBuku untuk ID %s di %s.\n", idBuku, dataFilename);
+        // Ganti file asli dengan file sementara
+        if (rename("temp.csv", dataFilename) == 0)
+        {
+            printf("File %s berhasil diperbarui.\n", dataFilename);
+        }
+        else
+        {
+            perror("Gagal mengganti file");
+        }
     }
     else
     {
-        remove("temp.csv");
-        printf("ID Buku %s Tidak Ditemukan di %s.\n", idBuku, dataFilename);
+        remove("temp.csv"); // Hapus file sementara jika tidak ada perubahan
+        printf("ID Buku %s tidak ditemukan di %s.\n", idBuku, dataFilename);
     }
 }
 
@@ -589,34 +600,35 @@ void returnBorrowedBook(BorrowData **head, const char *idBuku, const char *retur
 
     if (temp == NULL)
     {
-        printf("Catatan Peminjam dengan ID %s tidak ditemukan.\n", idBuku);
+        printf("Catatan peminjam dengan ID %s tidak ditemukan.\n", idBuku);
         return;
     }
 
+    // Tambahkan catatan ke file pengembalian
     FILE *file = fopen(returnFile, "a");
     if (!file)
     {
-        fprintf(stderr, "Gagal untuk membuka file: %s\n", returnFile);
+        fprintf(stderr, "Gagal membuka file: %s\n", returnFile);
         return;
     }
     fprintf(file, "%s,%s\n", temp->nama, temp->idBuku);
     fclose(file);
 
+    // Hapus catatan dari linked list
     if (prev == NULL)
     {
-
         *head = temp->next;
     }
     else
     {
         prev->next = temp->next;
     }
-
     free(temp);
 
-    updateJumlahBuku(dataFile, idBuku);
+    // Perbarui stok buku di data.csv
+    updateStokBuku(dataFile, idBuku);
 
-    printf("Catatan dengan ID %s telah dikembalikan dan diperbarui.\n", idBuku);
+    printf("Catatan dengan ID %s telah dikembalikan dan stok diperbarui.\n", idBuku);
 }
 
 int main()
