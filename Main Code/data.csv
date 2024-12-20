@@ -1,5 +1,5 @@
 idBuku,judulBuku,penulis,jumlahBuku,stock
-B001,Dasar-Dasar Pemrograman,John Doe,5,5
+B001,Dasar-Dasar Pemrograman,John Doe,5,3
 B002,Struktur Data dan Algoritma,Jane Smith,10,10
 B003,Pemrograman Berorientasi Objek,Robert Bro,8,8
 B004,Sistem Operasi,Alice Whit,12,12

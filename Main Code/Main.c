@@ -2,13 +2,14 @@
 #include <string.h>
 #include <stdlib.h>
 
+// Cari Buku -------------------------------------------------------------------------------------------------------------------------------------------------------------
 typedef struct find_node
 {
     char idBuku[10];
     char judulBuku[100];
     char penulis[50];
     int jumlahBuku;
-    int stock; // New field for stock
+    int stock; 
     struct find_node *next;
 } find_node;
 
@@ -24,7 +25,7 @@ find_node *createfind_node(const char *idBuku, const char *judulBuku, const char
     strncpy(newfind_node->judulBuku, judulBuku, 100);
     strncpy(newfind_node->penulis, penulis, 50);
     newfind_node->jumlahBuku = jumlahBuku;
-    newfind_node->stock = stock; // Initialize stock
+    newfind_node->stock = stock; 
     newfind_node->next = NULL;
     return newfind_node;
 }
@@ -160,10 +161,7 @@ void find_freelist(find_node *find_head)
     }
 }
 
-void option2()
-{
-    printf("Option 2 selected.\n");
-}
+// Peminjaman -------------------------------------------------------------------------------------------------------------------------------------------------------------
 typedef struct Book {
     char id_buku[5];
     char judul_buku[100];
@@ -185,14 +183,12 @@ typedef struct queue {
     node *rear;
 } queue;
 
-// Fungsi untuk menginisialisasi antrian
 void initqueue(queue *q) {
     q->count = 0;
     q->front = NULL;
     q->rear = NULL;
 }
 
-// Fungsi untuk menambahkan elemen ke dalam antrian
 void enqueue(queue *q, char nama_user[50], char id_buku[5]) {
     node *newNode = (node *)malloc(sizeof(node));
     if (newNode == NULL) {
@@ -212,7 +208,6 @@ void enqueue(queue *q, char nama_user[50], char id_buku[5]) {
     q->count++;
 }
 
-// Fungsi untuk memuat data buku dari CSV ke dalam Linked List
 Book *load_books_from_csv(const char *filename) {
     FILE *file = fopen(filename, "r");
     if (!file) {
@@ -223,17 +218,31 @@ Book *load_books_from_csv(const char *filename) {
     Book *head = NULL, *current = NULL;
     char line[256];
 
+    fgets(line, sizeof(line), file); 
+
     while (fgets(line, sizeof(line), file)) {
+
+        if (line[0] == '\0' || line[0] == '\n') {
+            continue; 
+        }
+
         Book *newBook = (Book *)malloc(sizeof(Book));
         if (!newBook) {
             printf("Error: Gagal alokasi memori untuk buku.\n");
             fclose(file);
             return NULL;
         }
-        sscanf(line, "%4[^,],%99[^,],%49[^,],%d,%d",
-               newBook->id_buku, newBook->judul_buku,
-               newBook->penulis, &newBook->jumlah_buku, 
-               &newBook->stock);
+
+        int itemsParsed = sscanf(line, "%4[^,],%99[^,],%49[^,],%d,%d",
+                                  newBook->id_buku, newBook->judul_buku,
+                                  newBook->penulis, &newBook->jumlah_buku, 
+                                  &newBook->stock);
+
+        if (itemsParsed != 5) {
+            free(newBook);
+            continue; 
+        }
+
         newBook->next = NULL;
 
         if (head == NULL) {
@@ -243,11 +252,11 @@ Book *load_books_from_csv(const char *filename) {
             current = newBook;
         }
     }
+
     fclose(file);
     return head;
 }
 
-// Fungsi untuk menyimpan Linked List kembali ke file CSV
 void save_books_to_csv(const char *filename, Book *head) {
     FILE *file = fopen(filename, "w");
     if (!file) {
@@ -255,39 +264,45 @@ void save_books_to_csv(const char *filename, Book *head) {
         return;
     }
 
+    fprintf(file, "idBuku,judulBuku,penulis,jumlahBuku,stock\n");
+
     Book *current = head;
     while (current) {
+
+        if (current->id_buku[0] == '\0' || current->judul_buku[0] == '\0') {
+            continue; 
+        }
+
         fprintf(file, "%s,%s,%s,%d,%d\n",
                 current->id_buku, current->judul_buku,
                 current->penulis, current->jumlah_buku,
-                current->stock);  // Menyimpan stok yang telah diperbarui
+                current->stock);  
         current = current->next;
     }
+
     fclose(file);
 }
 
-// Fungsi untuk mengurangi stok buku berdasarkan ID buku
 int reduce_stock(Book *head, const char *id_buku) {
     Book *current = head;
     while (current) {
         if (strcmp(current->id_buku, id_buku) == 0) {
             if (current->stock > 0) {
                 current->stock--;
-                return 1; // Stok berhasil dikurangi
+                return 1; 
             } else {
                 printf("Stok buku \"%s\" habis!\n", current->judul_buku);
-                return 0; // Stok habis
+                return 0; 
             }
         }
         current = current->next;
     }
     printf("Buku dengan ID %s tidak ditemukan!\n", id_buku);
-    return 0; // Buku tidak ditemukan
+    return 0; 
 }
 
-// Fungsi untuk menambahkan data peminjam ke dalam file user_list.csv
 void save_user_to_csv(const char *filename, const char *nama_user, const char *id_buku) {
-    FILE *file = fopen(filename, "a");  // Mode append
+    FILE *file = fopen(filename, "a");  
     if (file) {
         fprintf(file, "%s,%s\n", nama_user, id_buku);
         fclose(file);
@@ -296,6 +311,7 @@ void save_user_to_csv(const char *filename, const char *nama_user, const char *i
     }
 }
 
+// Antrian  -------------------------------------------------------------------------------------------------------------------------------------------------------------
 void displayQueue(queue *q)
 {
     char buffer[255];
@@ -313,6 +329,7 @@ void displayQueue(queue *q)
     fclose(file);
 }
 
+// Riwayat  -------------------------------------------------------------------------------------------------------------------------------------------------------------
 typedef struct Node
 {
     char nama_user[50];
@@ -335,20 +352,17 @@ void tambahRiwayat(Node **head, Node **tail, const char *nama, const char *id)
     newNode->right = NULL; 
     newNode->left = *tail; 
 
-    
     if (*tail != NULL)
     {
         (*tail)->right = newNode;
     }
     *tail = newNode; 
 
-  
     if (*head == NULL)
     {
         *head = newNode;
     }
 }
-
 
 void tampilkanRiwayat(Node *head)
 {
@@ -399,7 +413,7 @@ void loadRiwayat(Node **head, Node **tail)
 
     while (fscanf(file, " %49[^,],%9s", nama, id_buku_temp) == 2)
     {
-        
+
         if (strlen(nama) > 0 && strlen(id_buku_temp) > 0)
         {
             tambahRiwayat(head, tail, nama, id_buku_temp);
@@ -420,220 +434,112 @@ void freeList(Node *head)
     }
 }
 
-typedef struct BorrowData
-{
-    char nama[50];
-    char idBuku[10];
-    struct BorrowData *next;
-} BorrowData;
+// Pengembalian -------------------------------------------------------------------------------------------------------------------------------------------------------------
+#define MAX_LINE_LENGTH 256
 
-BorrowData *createBorrowData(const char *nama, const char *idBuku)
-{
-    BorrowData *newNode = (BorrowData *)malloc(sizeof(BorrowData));
-    if (!newNode)
-    {
-        fprintf(stderr, "Alokasi Memori Gagal\n");
-        exit(1);
-    }
-    strncpy(newNode->nama, nama, sizeof(newNode->nama) - 1);
-    strncpy(newNode->idBuku, idBuku, sizeof(newNode->idBuku) - 1);
-    newNode->nama[sizeof(newNode->nama) - 1] = '\0';
-    newNode->idBuku[sizeof(newNode->idBuku) - 1] = '\0';
-    newNode->next = NULL;
-    return newNode;
-}
-
-void appendBorrowData(BorrowData **head, const char *nama, const char *idBuku)
-{
-    BorrowData *newNode = createBorrowData(nama, idBuku);
-    if (*head == NULL)
-    {
-        *head = newNode;
-    }
-    else
-    {
-        BorrowData *temp = *head;
-        while (temp->next != NULL)
-        {
-            temp = temp->next;
-        }
-        temp->next = newNode;
-    }
-}
-
-void readBorrowFile(const char *filename, BorrowData **head)
-{
-    FILE *file = fopen(filename, "r");
-    if (!file)
-    {
-        fprintf(stderr, "Gagal untuk membuka file: %s\n", filename);
+void displayUsers() {
+    FILE *file = fopen("user_list.csv", "r");
+    if (file == NULL) {
+        printf("Error opening user_list.csv\n");
         return;
     }
 
-    char line[256];
-    while (fgets(line, sizeof(line), file))
-    {
-        char nama[50], idBuku[10];
-        if (sscanf(line, "%49[^,],%9s", nama, idBuku) == 2)
-        {
-            appendBorrowData(head, nama, idBuku);
-        }
+    char line[MAX_LINE_LENGTH];
+    printf("Tampilkan Peminjaman:\n");
+    while (fgets(line, sizeof(line), file)) {
+        printf("%s", line);
     }
-
     fclose(file);
 }
 
-void displayBorrowData(BorrowData *head)
-{
-    if (head == NULL)
-    {
-        printf("Tidak Ada Catatan Peminjaman yang tersedia.\n");
+void returnBook(const char *borrower) {
+    FILE *userFile = fopen("user_list.csv", "r");
+    FILE *tempUserFile = fopen("temp_user_list.csv", "w");
+    FILE *dataFile = fopen("data.csv", "r");
+    FILE *tempDataFile = fopen("temp_data.csv", "w");
+    FILE *historyFile = fopen("riwayat.csv", "a");
+
+    if (!userFile || !tempUserFile || !dataFile || !tempDataFile || !historyFile) {
+        printf("Error opening file\n");
         return;
     }
 
-    printf("\nDaftar Buku yang Dipinjam:\n");
-    printf("-------------------------------\n");
-    printf("Nama           :   ID Buku\n");
-    printf("-------------------------------\n");
-    BorrowData *temp = head;
-    while (temp != NULL)
-    {
-        printf("%-15s :   %s\n", temp->nama, temp->idBuku);
-        temp = temp->next;
-    }
-    printf("-------------------------------\n");
-}
+    char userLine[MAX_LINE_LENGTH];
+    char bookId[MAX_LINE_LENGTH];
+    char line[MAX_LINE_LENGTH];
+    int bookFound = 0;
+    int borrowerFound = 0;
 
-void saveBorrowData(const char *filename, BorrowData *head)
-{
-    FILE *file = fopen(filename, "w");
-    if (!file)
-    {
-        fprintf(stderr, "Gagal untuk membuka file: %s\n", filename);
+    while (fgets(userLine, sizeof(userLine), userFile)) {
+        char name[MAX_LINE_LENGTH];
+        sscanf(userLine, "%[^,]", name); 
+
+        if (strcmp(name, borrower) != 0) {
+            fprintf(tempUserFile, "%s", userLine); 
+        } else {
+
+            sscanf(userLine, "%*[^,],%s", bookId);
+            fprintf(historyFile, "%s,%s\n", borrower, bookId); 
+            borrowerFound = 1;
+            bookFound = 1; 
+        }
+    }
+
+    if (!borrowerFound) {
+        printf("Peminjam tidak ada\n");
+        fclose(userFile);
+        fclose(tempUserFile);
+        fclose(dataFile);
+        fclose(tempDataFile);
+        fclose(historyFile);
+        remove("temp_user_list.csv");
+        remove("temp_data.csv");
         return;
     }
 
-    BorrowData *temp = head;
-    while (temp != NULL)
-    {
-        fprintf(file, "%s,%s\n", temp->nama, temp->idBuku);
-        temp = temp->next;
-    }
+    int firstLine = 1;  
+    if (bookFound) {
+        while (fgets(line, sizeof(line), dataFile)) {
+            if (firstLine) {
 
-    fclose(file);
-}
-
-void updateStokBuku(const char *dataFilename, const char *idBuku)
-{
-    FILE *file = fopen(dataFilename, "r");
-    FILE *tempFile = fopen("temp.csv", "w");
-
-    if (!file || !tempFile)
-    {
-        fprintf(stderr, "Gagal Membuka file untuk pembaruan operasi\n");
-        if (file)
-            fclose(file);
-        if (tempFile)
-            fclose(tempFile);
-        return;
-    }
-
-    char line[256];
-    int updated = 0;
-
-    while (fgets(line, sizeof(line), file))
-    {
-        char tempId[10], title[100], author[50];
-        int jumlahBuku, stok;
-
-        // Membaca format file (idbuku, judulbuku, penulis, jumlahbuku, stok)
-        if (sscanf(line, "%9[^,],%99[^,],%49[^,],%d,%d", tempId, title, author, &jumlahBuku, &stok) == 5)
-        {
-            // Jika ID buku cocok, tambahkan stok
-            if (strcmp(tempId, idBuku) == 0)
-            {
-                stok++; // Tambahkan stok karena buku dikembalikan
-                printf("Stok buku dengan ID %s diperbarui menjadi %d.\n", tempId, stok);
-                updated = 1;
+                fprintf(tempDataFile, "%s", line);
+                firstLine = 0;
+                continue;
             }
-            // Tulis kembali data ke file sementara
-            fprintf(tempFile, "%s,%s,%s,%d,%d\n", tempId, title, author, jumlahBuku, stok);
-        }
-        else
-        {
-            fprintf(stderr, "Baris tidak valid: %s", line);
-            fprintf(tempFile, "%s", line); // Salin baris tanpa modifikasi jika tidak valid
-        }
-    }
 
-    fclose(file);
-    fclose(tempFile);
+            char idBuku[MAX_LINE_LENGTH];
+            char judulBuku[MAX_LINE_LENGTH];
+            char penulis[MAX_LINE_LENGTH];
+            int jumlahBuku, stock;
 
-    if (updated)
-    {
-        // Ganti file asli dengan file sementara
-        if (rename("temp.csv", dataFilename) == 0)
-        {
-            printf("File %s berhasil diperbarui.\n", dataFilename);
-        }
-        else
-        {
-            perror("Gagal mengganti file");
+            sscanf(line, "%[^,],%[^,],%[^,],%d,%d", idBuku, judulBuku, penulis, &jumlahBuku, &stock);
+
+            if (strcmp(idBuku, bookId) == 0) {
+                stock++;  
+            }
+
+            fprintf(tempDataFile, "%s,%s,%s,%d,%d\n", idBuku, judulBuku, penulis, jumlahBuku, stock);
         }
     }
-    else
-    {
-        remove("temp.csv"); // Hapus file sementara jika tidak ada perubahan
-        printf("ID Buku %s tidak ditemukan di %s.\n", idBuku, dataFilename);
-    }
-}
 
-void returnBorrowedBook(BorrowData **head, const char *idBuku, const char *returnFile, const char *dataFile)
-{
-    BorrowData *temp = *head, *prev = NULL;
+    fclose(userFile);
+    fclose(tempUserFile);
+    fclose(dataFile);
+    fclose(tempDataFile);
+    fclose(historyFile);
 
-    while (temp != NULL && strcmp(temp->idBuku, idBuku) != 0)
-    {
-        prev = temp;
-        temp = temp->next;
-    }
+    remove("user_list.csv");
+    rename("temp_user_list.csv", "user_list.csv");
 
-    if (temp == NULL)
-    {
-        printf("Catatan peminjam dengan ID %s tidak ditemukan.\n", idBuku);
-        return;
-    }
+    remove("data.csv");
+    rename("temp_data.csv", "data.csv");
 
-    // Tambahkan catatan ke file pengembalian
-    FILE *file = fopen(returnFile, "a");
-    if (!file)
-    {
-        fprintf(stderr, "Gagal membuka file: %s\n", returnFile);
-        return;
-    }
-    fprintf(file, "%s,%s\n", temp->nama, temp->idBuku);
-    fclose(file);
-
-    // Hapus catatan dari linked list
-    if (prev == NULL)
-    {
-        *head = temp->next;
-    }
-    else
-    {
-        prev->next = temp->next;
-    }
-    free(temp);
-
-    // Perbarui stok buku di data.csv
-    updateStokBuku(dataFile, idBuku);
-
-    printf("Catatan dengan ID %s telah dikembalikan dan stok diperbarui.\n", idBuku);
+    printf("Buku telah dikembalikan dan stok diperbarui.\n");
 }
 
 int main()
 {
-
+// Cari Buku
     find_node *find_head = NULL;
     const char *filename = "data.csv";
 
@@ -643,6 +549,7 @@ int main()
 
     char id[10];
 
+// Peminjaman dan Antrian
     Book *book_list = load_books_from_csv("data.csv");
     if (!book_list) return 1;
     queue antrian;
@@ -655,6 +562,7 @@ int main()
     char buffer[50];
     int antri_choice;
 
+// Riwayat
     Node *head = NULL;
     Node *tail = NULL;
     loadRiwayat(&head, &tail);
@@ -663,18 +571,11 @@ int main()
     char input_id_buku[50];
     const char *id_buku_result = NULL;
 
-    BorrowData *borrowList = NULL;
-    const char *borrowFile = "user_list.csv";
-    const char *returnFile = "pengembalian.csv";
-    const char *dataFile = "data.csv";
-
-    readBorrowFile(borrowFile, &borrowList);
-
+// Pengembalian
     int return_choice;
-    char idBuku[10];
 
+// Main
     int choice;
-    int pilihan;
 
     while (1)
     {
@@ -733,47 +634,39 @@ int main()
             switch (pinjam_choice)
             {
             case 1:
-               // Input nama user
-    printf("Nama user: ");
-    fgets(nama_user, sizeof(nama_user), stdin);
-    nama_user[strcspn(nama_user, "\n")] = '\0'; // Menghapus newline
 
-    // Input ID buku yang ingin dipinjam
-    printf("ID buku yang mau dipinjam: ");
-    scanf("%s", id_buku);
+            printf("Nama user: ");
+            fgets(nama_user, sizeof(nama_user), stdin);
+            nama_user[strcspn(nama_user, "\n")] = '\0'; 
 
-    // Kurangi stok buku jika tersedia
-    if (reduce_stock(book_list, id_buku)) {
-        enqueue(&antrian, nama_user, id_buku);
-        printf("Buku berhasil dipinjam oleh %s (ID Buku: %s)\n", nama_user, id_buku);
+            printf("ID buku yang mau dipinjam: ");
+            scanf("%s", id_buku);
 
-        // Debug: Menampilkan stok setelah pengurangan
-        Book *current = book_list;
-        while (current) {
-            if (strcmp(current->id_buku, id_buku) == 0) {
-                printf("Stok buku setelah pengurangan: %d\n", current->stock);
+            if (reduce_stock(book_list, id_buku)) {
+                enqueue(&antrian, nama_user, id_buku);
+                printf("Buku berhasil dipinjam oleh %s (ID Buku: %s)\n", nama_user, id_buku);
+
+                Book *current = book_list;
+                while (current) {
+                    if (strcmp(current->id_buku, id_buku) == 0) {
+                        printf("Stok buku setelah pengurangan: %d\n", current->stock);
+                    }
+                    current = current->next;
+                }
+
+                save_books_to_csv("data.csv", book_list);
+
+                save_user_to_csv("user_list.csv", nama_user, id_buku);
+
             }
-            current = current->next;
-        }
 
-        // Simpan data buku yang telah diperbarui ke file
-        save_books_to_csv("data.csv", book_list);
-
-        // Simpan data peminjaman ke file user_list.csv
-        save_user_to_csv("user_list.csv", nama_user, id_buku);
-
-    }
-
-    // Bersihkan memori Linked List setelah selesai
-    Book *current = book_list;
-    while (current) {
-        Book *temp = current;
-        current = current->next;
-        free(temp);
-    }
-
-                break;
-
+            Book *current = book_list;
+            while (current) {
+                Book *temp = current;
+                current = current->next;
+                free(temp);
+            }
+            break;
             case 2:
                 printf("\nKeluar dari menu peminjaman.\n");
                 break;
@@ -786,8 +679,9 @@ int main()
 
         case 3:
             printf("\n Menu Antrian \n");
-            printf(" 1. Tampilkan Antrian : \n");
+            printf(" 1. Tampilkan Antrian \n");
             printf(" 2. Keluar. \n");
+            printf("Masukkan Pilihan:");
             scanf("%d", &antri_choice);
             getchar();
             switch (antri_choice)
@@ -847,57 +741,36 @@ int main()
             }
             break;
         case 5:
-            printf("\nMenu:\n");
-            printf("1. Tampilkan seluruh buku yang dipinjam\n");
-            printf("2. Mengembalikan Buku\n");
-            printf("3. Keluar\n");
-            printf("Masukan Pilihan Anda: ");
-            if (scanf("%d", &return_choice) != 1)
-            {
-                printf("Invalid input. Masukan Angka.\n");
-                while (getchar() != '\n')
-                    ;
-                continue;
-            }
+            printf("1. Tampilkan Peminjaman\n");
+            printf("2. Kembalikan Buku\n");
+            printf("3. Exit\n");
+            printf("Pilih opsi: ");
+            scanf("%d", &return_choice);
+            getchar(); 
 
-            switch (return_choice)
-            {
-            case 1:
-            {
-
-                displayBorrowData(borrowList);
-                break;
-            }
-            case 2:
-            {
-
-                printf("Masukan ID buku untuk pengembalian: ");
-                scanf("%s", idBuku);
-
-                returnBorrowedBook(&borrowList, idBuku, returnFile, dataFile);
-                saveBorrowData(borrowFile, borrowList);
-                break;
-            }
-            case 3:
-            {
-
-                printf("Keluar Dari Program. Membersihkan memori...\n");
-                BorrowData *temp;
-                while (borrowList != NULL)
-                {
-                    temp = borrowList;
-                    borrowList = borrowList->next;
-                    free(temp);
-                }
-                break;
-            }
-            default:
-                printf("Pilihan Tidak Valid. Tolong Coba Lagi.\n");
+            switch (return_choice) {
+                case 1:
+                    displayUsers();
+                    break;
+                case 2:
+                    {
+                        char borrower[MAX_LINE_LENGTH];
+                        printf("Masukkan Nama Peminjam: ");
+                        fgets(borrower, sizeof(borrower), stdin);
+                        borrower[strcspn(borrower, "\n")] = '\0'; 
+                        returnBook(borrower);
+                    }
+                    break;
+                case 3:
+                    printf("Keluar dari program.\n");
+                    break;
+                default:
+                    printf("Opsi tidak valid. Silakan coba lagi.\n");
             }
             break;
         case 6:
             printf("Exiting...\n");
-            break;
+            return 0;
         default:
             printf("Pilihan Salah.\n");
         }
