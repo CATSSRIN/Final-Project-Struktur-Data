@@ -735,7 +735,7 @@ int main()
 
                 if (id_buku_result == NULL)
                 {
-                    printf("ID buku tidak ditemukan dalam user_list.csv.\n");
+                    printf("ID buku tidak ditemukan, cek kembali.\n");
                 }
                 else
                 {
