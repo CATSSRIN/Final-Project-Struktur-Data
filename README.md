@@ -3,7 +3,7 @@
 Anggota Kelompok:
 - [CAEZARLOV NUGRAHA](https://github.com/CATSSRIN)
 - [FAJAR RAHMAD JAYA](https://github.com/Fajar-RahmadJaya)
-- MIFTAHUS SYIFAUL HAQQI
+- [MIFTAHUS SYIFAUL HAQQI](https://github.com/MiftahusHaqqi)
 - SALSABILLA NUHAA AINI
 - I KADEK RANGGA SANDI KUSUMA WARDANA
 
