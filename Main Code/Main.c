@@ -401,7 +401,7 @@ const char *cariIDBuku(Node *tail, const char *id_buku)
 
 void loadRiwayat(Node **head, Node **tail)
 {
-    FILE *file = fopen("user_list.csv", "r");
+    FILE *file = fopen("riwayat.csv", "r");
     if (file == NULL)
     {
         printf("Gagal membuka file user_list.csv\n");
