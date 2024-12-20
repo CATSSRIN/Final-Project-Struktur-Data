@@ -332,20 +332,23 @@ void tambahRiwayat(Node **head, Node **tail, const char *nama, const char *id)
 
     strcpy(newNode->nama_user, nama);
     strcpy(newNode->id_buku, id);
-    newNode->right = NULL;
-    newNode->left = *tail;
+    newNode->right = NULL; 
+    newNode->left = *tail; 
 
+    
     if (*tail != NULL)
     {
         (*tail)->right = newNode;
     }
-    *tail = newNode;
+    *tail = newNode; 
 
+  
     if (*head == NULL)
     {
         *head = newNode;
     }
 }
+
 
 void tampilkanRiwayat(Node *head)
 {
@@ -394,9 +397,13 @@ void loadRiwayat(Node **head, Node **tail)
     char nama[50];
     char id_buku_temp[10];
 
-    while (fscanf(file, " %50[^,],%9s\n", nama, id_buku_temp) == 2)
+    while (fscanf(file, " %49[^,],%9s", nama, id_buku_temp) == 2)
     {
-        tambahRiwayat(head, tail, nama, id_buku_temp);
+        
+        if (strlen(nama) > 0 && strlen(id_buku_temp) > 0)
+        {
+            tambahRiwayat(head, tail, nama, id_buku_temp);
+        }
     }
 
     fclose(file);
