@@ -1,7 +1,7 @@
 # Final Project Struktur Data
 ## Kelompok 7
 Anggota Kelompok:
-- CAEZARLOV NUGRAHA
+- [CAEZARLOV NUGRAHA](https://github.com/CATSSRIN)
 - FAJAR RAHMAD JAYA
 - MIFTAHUS SYIFAUL HAQQI
 - SALSABILLA NUHAA AINI
