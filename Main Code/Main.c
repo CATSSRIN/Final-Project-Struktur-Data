@@ -385,18 +385,29 @@ void tampilkanRiwayat(Node *head)
     }
 }
 
-const char *cariIDBuku(Node *tail, const char *id_buku)
+const char *cariIDBuku(const char *id_buku)
 {
-    Node *current = tail;
-    while (current != NULL)
+    FILE *file = fopen("user_list.csv", "r");
+    if (file == NULL)
     {
-        if (strcmp(current->id_buku, id_buku) == 0)
-        {
-            return current->nama_user;
-        }
-        current = current->left;
+        printf("Gagal membuka file user_list.csv\n");
+        return NULL;
     }
-    return NULL;
+
+    static char nama_user[50]; 
+    char id_buku_temp[10];
+
+    while (fscanf(file, " %49[^,],%9s", nama_user, id_buku_temp) == 2)
+    {
+        if (strcmp(id_buku_temp, id_buku) == 0)
+        {
+            fclose(file);
+            return nama_user;
+        }
+    }
+
+    fclose(file);
+    return NULL; 
 }
 
 void loadRiwayat(Node **head, Node **tail)
@@ -719,15 +730,16 @@ int main()
                 printf("Masukkan ID buku untuk mencari peminjam terakhir: ");
                 fgets(input_id_buku, sizeof(input_id_buku), stdin);
                 input_id_buku[strcspn(input_id_buku, "\n")] = 0;
-                id_buku_result = cariIDBuku(head, input_id_buku);
+
+                id_buku_result = cariIDBuku(input_id_buku); 
 
                 if (id_buku_result == NULL)
                 {
-                    printf("ID buku tidak ditemukan dalam riwayat peminjaman.\n");
+                    printf("ID buku tidak ditemukan dalam user_list.csv.\n");
                 }
                 else
                 {
-                    printf("peminjam dari id buku %s adalah: %s\n", input_id_buku, id_buku_result);
+                    printf("Peminjam dari ID buku %s adalah: %s\n", input_id_buku, id_buku_result);
                 }
                 break;
             case 3:
