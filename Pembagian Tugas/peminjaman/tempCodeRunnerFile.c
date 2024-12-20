@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 typedef struct Book {
     char id_buku[5];
     char judul_buku[100];
