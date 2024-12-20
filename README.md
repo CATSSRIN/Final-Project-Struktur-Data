@@ -5,7 +5,7 @@ Anggota Kelompok:
 - [FAJAR RAHMAD JAYA](https://github.com/Fajar-RahmadJaya)
 - [MIFTAHUS SYIFAUL HAQQI](https://github.com/MiftahusHaqqi)
 - [SALSABILLA NUHAA AINI](https://github.com/SALSABILLANUHAAAINI)
-- I KADEK RANGGA SANDI KUSUMA WARDANA
+- [I KADEK RANGGA SANDI KUSUMA WARDANA](https://github.com/ikadekrangga)
 
 ## Studi Kasus
 - Sistem Manajemen Peminjaman Buku di Perpustakaan
